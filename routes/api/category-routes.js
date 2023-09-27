@@ -63,9 +63,15 @@ router.put('/:id', async (req, res) => {
 router.delete('/:id', async (req, res) => {
   // delete a category by its `id` value
   try {
-    const categoryUpdate = await Category.destroy({
+    const categoryDelete = await Category.destroy({
       where: {id: req.params.id}
     });
+        //error handling if there's no product with that id
+    if (!categoryDelete) {
+      res.status(404).json({ message: 'No product with this id!' });
+      return;
+    }
+    res.status(200).json(categoryDelete);
   } catch (error) {
     res.status(500).json(err);
   }
